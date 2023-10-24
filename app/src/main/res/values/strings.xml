@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">PushNotifications</string>
+    <string name="notification_channel_id_test" translatable="false">test_channel</string>
+    <string name="notification_channel_name_test">Test Channel</string>
+    <string name="allow_notifications_button">Allow push notifications</string>
+    <string name="notifications_allowed_description">You are ready to receive push notifications.</string>
 </resources>

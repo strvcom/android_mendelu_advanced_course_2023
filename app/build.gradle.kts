@@ -2,6 +2,8 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.googleServices)
 }
 
 android {
@@ -61,4 +63,7 @@ dependencies {
     implementation(libs.material3)
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
+    implementation(libs.firebase.messaging)
+    implementation(libs.moshi)
+    ksp(libs.moshi.codegen)
 }
