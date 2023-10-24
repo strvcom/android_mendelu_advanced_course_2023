@@ -1,6 +1,7 @@
 package com.strv.mendelu2023.pushnotifications
 
 import android.util.Log
+import androidx.core.app.NotificationManagerCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.squareup.moshi.Moshi
@@ -16,6 +17,10 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
         // TODO(12): handle notification
+        pushNotification(message.data)?.let { pushNotification ->
+            Log.e("MENDELU", "onMessageReceived: $pushNotification")
+            NotificationManagerCompat.from(this).sendNotification(pushNotification, this)
+        }
     }
 
     private fun pushNotification(data: Map<String, String>): PushNotification? {
