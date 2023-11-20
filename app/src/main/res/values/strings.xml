@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Pet Store</string>
+    <string name="failed_to_load_the_list">Failed to load the list</string>
+    <string name="no_internet_connection">No internet connection</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="back">Back</string>
+    <string name="login_failed">Login Failed</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="sign_in">Sign in</string>
+</resources>
