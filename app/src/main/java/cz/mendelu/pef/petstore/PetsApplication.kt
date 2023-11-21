@@ -5,6 +5,8 @@ import android.content.Context
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
+const val useMockedValues: Boolean = true
+
 @HiltAndroidApp
 class PetsApplication : Application() {
 

@@ -42,9 +42,9 @@ internal fun MainNavHost(
         )
 
         listOfPetsScreenDestination(
-            navigateToPetDetail = {
+            navigateToPetDetail = { petId ->
                 navController.navigate(
-                    route = RoutePetDetail
+                    route = "$RoutePetDetail/$petId",
                 )
             }
         )

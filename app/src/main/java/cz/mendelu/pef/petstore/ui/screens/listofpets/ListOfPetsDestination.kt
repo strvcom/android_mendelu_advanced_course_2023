@@ -6,7 +6,7 @@ import androidx.navigation.compose.composable
 const val RouteListOfPets = "routeListOfPets"
 
 fun NavGraphBuilder.listOfPetsScreenDestination(
-    navigateToPetDetail: () -> Unit,
+    navigateToPetDetail: (petId: Long) -> Unit,
 ) {
     composable(
         route = RouteListOfPets,

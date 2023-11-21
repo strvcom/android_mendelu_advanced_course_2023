@@ -29,7 +29,7 @@ const val TestTagListOfPetsScreenContent = "TestTagListOfPetsScreenContent"
 
 @Composable
 fun ListOfPetsScreen(
-    navigateToPetDetail: () -> Unit,
+    navigateToPetDetail: (petId: Long) -> Unit,
     viewModel: ListOfPetsViewModel = hiltViewModel()
 ) {
     val uiState: MutableState<UiState<List<Pet>, ListOfPetsErrors>> =
@@ -62,7 +62,7 @@ fun ListOfPetsScreen(
 
 @Composable
 fun ListOfPetsScreenContent(
-    onPetDetailClick: () -> Unit,
+    onPetDetailClick: (petId: Long) -> Unit,
     paddingValues: PaddingValues,
     uiState: UiState<List<Pet>, ListOfPetsErrors>
 ) {
@@ -94,14 +94,14 @@ fun ListOfPetsScreenContent(
 @Composable
 private fun PetItem(
     pet: Pet,
+    onPetDetailClick: (petId: Long) -> Unit,
     modifier: Modifier = Modifier,
-    onPetDetailClick: () -> Unit,
 ) {
     val coverUrl = pet.photoUrls?.firstOrNull()
 
     Column(
         modifier = modifier
-            .clickable { onPetDetailClick() }
+            .clickable { onPetDetailClick(pet.id!!) }
     ) {
         coverUrl?.let {
             AsyncImage(

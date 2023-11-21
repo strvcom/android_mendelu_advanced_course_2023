@@ -49,7 +49,7 @@ object ServerMock {
     )
 
     private val miniPig = Pet(
-        id = 3L,
+        id = 4L,
         name = "Paris",
         tags = emptyList(),
         category = mockCategory(Categories.MiniPig),
@@ -58,7 +58,7 @@ object ServerMock {
     )
 
     private val hamster = Pet(
-        id = 3L,
+        id = 5L,
         name = "Theo",
         tags = emptyList(),
         category = mockCategory(Categories.Hamster),
@@ -67,7 +67,7 @@ object ServerMock {
     )
 
     private val hedgehog = Pet(
-        id = 3L,
+        id = 6L,
         name = "Carlitto",
         tags = emptyList(),
         category = mockCategory(Categories.Hedgehog),
@@ -76,7 +76,7 @@ object ServerMock {
     )
 
     private val fish = Pet(
-        id = 3L,
+        id = 7L,
         name = "Leon",
         tags = emptyList(),
         category = mockCategory(Categories.Fish),

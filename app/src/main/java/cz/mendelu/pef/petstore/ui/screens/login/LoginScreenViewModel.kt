@@ -29,15 +29,6 @@ class LoginScreenViewModel @Inject constructor(
         val isEmailValid = email.isValidEmail()
         val isPasswordValid = password.isValidPassword()
 
-        /*if (isEmailValid && isPasswordValid) {
-            launch {
-                dataStoreRepository.setLoginSuccessful()
-                loginUIState.value =
-                    UiState(loading = false, data = LoginResponse(0, "", ""), errors = null)
-            }
-            return
-        }*/
-
         if (isEmailValid.not() || isPasswordValid.not()) {
             loginUIState.value = UiState(
                 loading = false,
