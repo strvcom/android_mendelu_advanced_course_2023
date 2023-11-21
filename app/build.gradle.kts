@@ -105,6 +105,9 @@ dependencies {
     // Hilt testing
     androidTestImplementation("com.google.dagger:hilt-android-testing:2.44")
     kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.44")
+
+    // Coil
+    implementation("io.coil-kt:coil-compose:2.1.0")
 }
 
 // For Hilt

@@ -1,7 +1,9 @@
 package cz.mendelu.pef.petstore.ui.screens.listofpets
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
@@ -10,9 +12,12 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
 import cz.mendelu.pef.compose.todo.ui.elements.PlaceholderScreenContent
 import cz.mendelu.pef.petstore.model.Pet
 import cz.mendelu.pef.petstore.model.UiState
@@ -62,13 +67,43 @@ fun ListOfPetsScreenContent(
             .padding(paddingValues),
     ) {
         if (uiState.data != null) {
-            uiState.data!!.forEach {
+            uiState.data!!.forEach { pet ->
                 item {
-                    it.name?.let {
-                        Text(text = it, color = basicTextColor())
+                    pet.name?.let {
+                        PetItem(
+                            modifier = Modifier.fillMaxWidth()
+                                .padding(horizontal = 16.dp)
+                                .padding(vertical = 24.dp),
+                            pet = pet,
+                        )
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun PetItem(
+    pet: Pet,
+    modifier: Modifier = Modifier,
+) {
+    val coverUrl = pet.photoUrls?.firstOrNull()
+
+    Column(modifier = modifier) {
+        coverUrl?.let {
+            AsyncImage(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp),
+                contentScale = ContentScale.FillBounds,
+                model = coverUrl,
+                contentDescription = "Loaded image"
+            )
+            Text(
+                text = pet.name.orEmpty(),
+                color = basicTextColor()
+            )
         }
     }
 }

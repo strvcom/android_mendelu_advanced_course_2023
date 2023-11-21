@@ -11,4 +11,5 @@ data class Pet(
     var name: String?,
     var photoUrls: List<String>?,
     var tags: List<Tag>?,
-    var status: String?)
+    var status: String?
+)

@@ -7,6 +7,7 @@ import cz.mendelu.pef.petstore.R
 import cz.mendelu.pef.petstore.architecture.BaseViewModel
 import cz.mendelu.pef.petstore.architecture.CommunicationResult
 import cz.mendelu.pef.petstore.communication.pets.PetsRemoteRepositoryImpl
+import cz.mendelu.pef.petstore.mock.ServerMock
 import cz.mendelu.pef.petstore.model.Pet
 import cz.mendelu.pef.petstore.model.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,18 +21,33 @@ class ListOfPetsViewModel @Inject constructor(
     private val petsRepository: PetsRemoteRepositoryImpl
 ) : BaseViewModel() {
 
+    private val useTestValues = true
+
     init {
         loadPets()
     }
 
     val petsUIState: MutableState<UiState<List<Pet>, ListOfPetsErrors>> = mutableStateOf(UiState())
 
-    fun loadPets() {
+    private fun loadPets() {
+        if (useTestValues) {
+            launch {
+                petsUIState.value = UiState(false, ServerMock.all, null)
+            }
+            return
+        }
+
         launch {
             val result = withContext(Dispatchers.IO) { petsRepository.pets("available") }
             Log.d("ListOfPetsViewModel, result:", "$result")
-            Log.d("ListOfPetsViewModel, result data size:", "${(result as? CommunicationResult.Success)?.data?.size}")
-            Log.d("ListOfPetsViewModel, result size:", "${(result as? CommunicationResult.Success)?.data?.toString()}")
+            Log.d(
+                "ListOfPetsViewModel, result data size:",
+                "${(result as? CommunicationResult.Success)?.data?.size}"
+            )
+            Log.d(
+                "ListOfPetsViewModel, result size:",
+                "${(result as? CommunicationResult.Success)?.data?.toString()}"
+            )
             when (result) {
                 is CommunicationResult.Success ->
                     petsUIState.value = UiState(false, result.data, null)
