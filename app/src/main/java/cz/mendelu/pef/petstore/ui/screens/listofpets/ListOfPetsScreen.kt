@@ -1,5 +1,6 @@
 package cz.mendelu.pef.petstore.ui.screens.listofpets
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,6 +28,7 @@ const val TestTagListOfPets = "listOfPets"
 
 @Composable
 fun ListOfPetsScreen(
+    navigateToPetDetail: () -> Unit,
     viewModel: ListOfPetsViewModel = hiltViewModel()
 ) {
     val uiState: MutableState<UiState<List<Pet>, ListOfPetsErrors>> =
@@ -48,13 +50,18 @@ fun ListOfPetsScreen(
         } else
             null
     ) {
-        ListOfPetsScreenContent(paddingValues = it, uiState = uiState.value)
+        ListOfPetsScreenContent(
+            paddingValues = it,
+            uiState = uiState.value,
+            onPetDetailClick = navigateToPetDetail,
+        )
     }
 
 }
 
 @Composable
 fun ListOfPetsScreenContent(
+    onPetDetailClick: () -> Unit,
     paddingValues: PaddingValues,
     uiState: UiState<List<Pet>, ListOfPetsErrors>
 ) {
@@ -68,10 +75,12 @@ fun ListOfPetsScreenContent(
                 item {
                     pet.name?.let {
                         PetItem(
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier
+                                .fillMaxWidth()
                                 .padding(horizontal = 16.dp)
                                 .padding(vertical = 24.dp),
                             pet = pet,
+                            onPetDetailClick = onPetDetailClick,
                         )
                     }
                 }
@@ -84,10 +93,14 @@ fun ListOfPetsScreenContent(
 private fun PetItem(
     pet: Pet,
     modifier: Modifier = Modifier,
+    onPetDetailClick: () -> Unit,
 ) {
     val coverUrl = pet.photoUrls?.firstOrNull()
 
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier
+            .clickable { onPetDetailClick() }
+    ) {
         coverUrl?.let {
             AsyncImage(
                 modifier = Modifier

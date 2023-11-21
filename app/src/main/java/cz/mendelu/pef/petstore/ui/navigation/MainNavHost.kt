@@ -12,6 +12,8 @@ import cz.mendelu.pef.petstore.ui.screens.listofpets.RouteListOfPets
 import cz.mendelu.pef.petstore.ui.screens.listofpets.listOfPetsScreenDestination
 import cz.mendelu.pef.petstore.ui.screens.login.RouteLogin
 import cz.mendelu.pef.petstore.ui.screens.login.loginScreenDestination
+import cz.mendelu.pef.petstore.ui.screens.petDetail.RoutePetDetail
+import cz.mendelu.pef.petstore.ui.screens.petDetail.petDetailDestination
 
 @ExperimentalAnimationApi
 @Composable
@@ -39,6 +41,14 @@ internal fun MainNavHost(
             }
         )
 
-        listOfPetsScreenDestination()
+        listOfPetsScreenDestination(
+            navigateToPetDetail = {
+                navController.navigate(
+                    route = RoutePetDetail
+                )
+            }
+        )
+
+        petDetailDestination()
     }
 }
