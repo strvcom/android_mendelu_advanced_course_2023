@@ -56,6 +56,7 @@ class UITests {
         with(composeRule) {
             onNodeWithTag(TestTagLoginInputEmail).assertIsDisplayed()
             onNodeWithTag(TestTagLoginInputPassword).assertIsDisplayed()
+            onNodeWithTag(TestTagLoginInputPassword).assertIsNotDisplayed()
             onNodeWithTag(TestTagLoginInputEmail).performTextInput("test@email.com")
 
             // Explain: Why not this?
