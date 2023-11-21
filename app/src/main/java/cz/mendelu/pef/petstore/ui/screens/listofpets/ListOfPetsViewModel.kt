@@ -6,8 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import cz.mendelu.pef.petstore.R
 import cz.mendelu.pef.petstore.architecture.BaseViewModel
 import cz.mendelu.pef.petstore.architecture.CommunicationResult
-import cz.mendelu.pef.petstore.communication.pets.PetsRemoteRepositoryImpl
-import cz.mendelu.pef.petstore.mock.ServerMock
+import cz.mendelu.pef.petstore.communication.pets.IPetsRemoteRepository
 import cz.mendelu.pef.petstore.model.Pet
 import cz.mendelu.pef.petstore.model.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,10 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ListOfPetsViewModel @Inject constructor(
-    private val petsRepository: PetsRemoteRepositoryImpl
+    private val petsRepository: IPetsRemoteRepository
 ) : BaseViewModel() {
-
-    private val useTestValues = true
 
     init {
         loadPets()
@@ -30,13 +27,6 @@ class ListOfPetsViewModel @Inject constructor(
     val petsUIState: MutableState<UiState<List<Pet>, ListOfPetsErrors>> = mutableStateOf(UiState())
 
     private fun loadPets() {
-        if (useTestValues) {
-            launch {
-                petsUIState.value = UiState(false, ServerMock.all, null)
-            }
-            return
-        }
-
         launch {
             val result = withContext(Dispatchers.IO) { petsRepository.pets("available") }
             Log.d("ListOfPetsViewModel, result:", "$result")

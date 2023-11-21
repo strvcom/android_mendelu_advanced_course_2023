@@ -12,9 +12,13 @@ import androidx.test.platform.app.InstrumentationRegistry
 import cz.mendelu.pef.petstore.ui.activities.MainActivity
 import cz.mendelu.pef.petstore.ui.navigation.MainNavHost
 import cz.mendelu.pef.petstore.ui.screens.listofpets.RouteListOfPets
+import cz.mendelu.pef.petstore.ui.screens.listofpets.TestTagListOfPetsScreenContent
+import cz.mendelu.pef.petstore.ui.screens.login.RouteLogin
 import cz.mendelu.pef.petstore.ui.screens.login.TestTagLoginButton
 import cz.mendelu.pef.petstore.ui.screens.login.TestTagLoginInputEmail
+import cz.mendelu.pef.petstore.ui.screens.login.TestTagLoginInputEmailError
 import cz.mendelu.pef.petstore.ui.screens.login.TestTagLoginInputPassword
+import cz.mendelu.pef.petstore.ui.screens.login.TestTagLoginInputPasswordError
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import junit.framework.Assert.assertTrue
@@ -54,79 +58,108 @@ class UITests {
     }
 
     @Test
-    fun test_report_email_valid_d() {
-        launchReportScreenWithNavigation()
+    fun test_input_valid_credentials_and_navigate_next() {
+        launchLoginScreenWithNavigation()
         with(composeRule) {
-            println("XXX start")
-            Timber.d("XXX start")
             onNodeWithTag(TestTagLoginInputEmail).assertIsDisplayed()
             onNodeWithTag(TestTagLoginInputPassword).assertIsDisplayed()
+
             onNodeWithTag(TestTagLoginInputEmail).performTextInput("test@email.com")
             onNodeWithTag(TestTagLoginInputPassword).performTextInput("heslo123")
+
             onNodeWithTag(TestTagLoginButton).performClick()
-            println("XXX before waitForIdle")
-            Timber.d("XXX before waitForIdle")
             waitForIdle()
-            println("XXX after waitForIdle")
-            Timber.d("XXX after waitForIdle")
 
             val route = navController.currentBackStackEntry?.destination?.route
             Thread.sleep(500)
-            println("XXX route = $route")
-            Timber.d("XXX route = $route")
             assertTrue(route == RouteListOfPets)
-
-            // Explain: Why not this?
-            //composeRule.onNodeWithTag(TEST_TAG_REPORT_EMAIL_ERROR, useUnmergedTree = true).assertIsNotDisplayed()
-            /*onNode(
-                //hasText(targetContext.resources.getString(R.string.report_enter_email_invalid)),
-                hasText("List of pets"),
-            ).assertDoesNotExist()*/
         }
     }
 
-    // Priority to do: High
-    /*@Test
-    fun test_report_email_valid() {
-        launchReportScreen()
+    @Test
+    fun test_input_invalid_credentials_and_stay_on_login() {
+        launchLoginScreenWithNavigation()
         with(composeRule) {
-            onNodeWithTag(TEST_TAG_REPORT_EMAIL_INPUT).assertIsDisplayed()
-            onNodeWithTag(TEST_TAG_REPORT_EMAIL_INPUT).performTextInput("test@email.com")
+            onNodeWithTag(TestTagLoginInputEmail).assertIsDisplayed()
+            onNodeWithTag(TestTagLoginInputPassword).assertIsDisplayed()
 
-            // Explain: Why not this?
-            //composeRule.onNodeWithTag(TEST_TAG_REPORT_EMAIL_ERROR, useUnmergedTree = true).assertIsNotDisplayed()
-            onNode(
-                hasText(targetContext.resources.getString(R.string.report_enter_email_invalid)),
-            ).assertDoesNotExist()
+            onNodeWithTag(TestTagLoginInputEmail).performTextInput("test@email.com")
+            onNodeWithTag(TestTagLoginInputPassword).performTextInput("h")
+
+            onNodeWithTag(TestTagLoginButton).performClick()
+            waitForIdle()
+
+            val route = navController.currentBackStackEntry?.destination?.route
+            Thread.sleep(500)
+            assertTrue(route == RouteLogin)
         }
     }
 
-    private fun launchReportScreen() {
-        composeRule.setContent {
-            val reportViewModel = initReportViewModel() // Explain: inaccessible by design
-            MaterialTheme {
-                ReportScreen(
-                    viewModel = reportViewModel, // Explain: this line can be deleted
-                    navigateToSuccessScreen = {},
-                    navigateToFailScreen = {},
-                )
-            }
+    @Test
+    fun test_input_invalid_email_and_display_error() {
+        launchLoginScreenWithNavigation()
+        with(composeRule) {
+            onNodeWithTag(TestTagLoginInputEmail).assertIsDisplayed()
+            onNodeWithTag(TestTagLoginInputPassword).assertIsDisplayed()
+
+            onNodeWithTag(TestTagLoginInputEmail).performTextInput("invalidmail")
+            onNodeWithTag(TestTagLoginInputPassword).performTextInput("heslo123")
+
+            onNodeWithTag(TestTagLoginButton).performClick()
+            onNodeWithTag(TestTagLoginInputEmailError).assertIsDisplayed()
         }
     }
 
-    private fun initReportViewModel(): ReportViewModel {
-        return composeRule.activity.viewModels<ReportViewModel>().value
-    }*/
+    //  TODO: show valid email and email error is not displayed
+    @Test
+    fun test_input_invalid_password_and_display_error() {
+        launchLoginScreenWithNavigation()
+        with(composeRule) {
+            onNodeWithTag(TestTagLoginInputEmail).assertIsDisplayed()
+            onNodeWithTag(TestTagLoginInputPassword).assertIsDisplayed()
 
+            onNodeWithTag(TestTagLoginInputEmail).performTextInput("valid@email.com")
+            onNodeWithTag(TestTagLoginInputPassword).performTextInput("a")
+
+            onNodeWithTag(TestTagLoginButton).performClick()
+            onNodeWithTag(TestTagLoginInputPasswordError).assertIsDisplayed()
+        }
+    }
+
+    @Test
+    fun test_launch_list_of_pets() {
+        launchListOfPetsScreenWithNavigation()
+        with(composeRule) {
+            println("XXX start")
+            Timber.d("XXX start")
+            //val screen = hasTestTag(TestTagListOfPetsScreenContent)
+            //waitUntilAtLeastOneExists(screen, 1_000)
+            onNodeWithTag(TestTagListOfPetsScreenContent).assertIsDisplayed()
+            Thread.sleep(1000)
+        }
+    }
 
     @OptIn(ExperimentalAnimationApi::class)
-    private fun launchReportScreenWithNavigation() {
+    private fun launchLoginScreenWithNavigation() {
         composeRule.activity.setContent {
             MaterialTheme {
                 navController = rememberNavController()
                 MainNavHost(
                     navController = navController,
                     showLogin = { true },
+                )
+            }
+        }
+    }
+
+    @OptIn(ExperimentalAnimationApi::class)
+    private fun launchListOfPetsScreenWithNavigation() {
+        composeRule.activity.setContent {
+            MaterialTheme {
+                navController = rememberNavController()
+                MainNavHost(
+                    navController = navController,
+                    showLogin = { false },
                 )
             }
         }

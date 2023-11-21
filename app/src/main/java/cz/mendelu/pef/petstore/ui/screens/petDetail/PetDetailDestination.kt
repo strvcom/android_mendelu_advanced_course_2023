@@ -9,6 +9,6 @@ fun NavGraphBuilder.petDetailDestination() {
     composable(
         route = RoutePetDetail,
     ) {
-        ListOfPetsScreen()
+        PetDetailScreen()
     }
 }

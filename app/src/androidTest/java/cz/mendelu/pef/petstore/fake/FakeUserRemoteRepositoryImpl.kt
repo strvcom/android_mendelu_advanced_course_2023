@@ -1,6 +1,5 @@
 package cz.mendelu.pef.petstore.fake
 
-import cz.mendelu.pef.petstore.architecture.CommunicationError
 import cz.mendelu.pef.petstore.architecture.CommunicationResult
 import cz.mendelu.pef.petstore.communication.user.IUserRemoteRepository
 import cz.mendelu.pef.petstore.communication.user.LoginResponse
@@ -12,15 +11,18 @@ class FakeUserRemoteRepositoryImpl @Inject constructor() : IUserRemoteRepository
         username: String,
         password: String
     ): CommunicationResult<LoginResponse> {
-        /*return CommunicationResult.Success(
+        //  Use this for success fake response
+        return CommunicationResult.Success(
             LoginResponse(
                 code = 200,
                 message = "Success",
                 type = "type"
             )
-        )*/
-        return CommunicationResult.Error(
-            CommunicationError(0, "")
         )
+
+        //  Use this for error fake response
+        /*return CommunicationResult.Error(
+            CommunicationError(0, "")
+        )*/
     }
 }

@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import cz.mendelu.pef.compose.todo.ui.elements.PlaceholderScreenContent
 import cz.mendelu.pef.petstore.R
@@ -25,9 +26,11 @@ import cz.mendelu.pef.petstore.ui.elements.RoundButton
 import cz.mendelu.pef.petstore.ui.elements.TextInputField
 import cz.mendelu.pef.petstore.ui.theme.basicMargin
 
-const val TestTagLoginInputEmail = "loginInputEmail"
-const val TestTagLoginInputPassword = "loginInputPassword"
-const val TestTagLoginButton = "loginButton"
+const val TestTagLoginInputEmail = "TestTagLoginInputEmail"
+const val TestTagLoginInputEmailError = "TestTagLoginInputEmailError"
+const val TestTagLoginInputPassword = "TestTagLoginInputPassword"
+const val TestTagLoginInputPasswordError = "TestTagLoginInputPasswordError"
+const val TestTagLoginButton = "TestTagLoginButton"
 
 @Composable
 fun LoginScreen(
@@ -71,7 +74,7 @@ fun LoginScreenContent(
     Column(
         modifier = Modifier.padding(all = basicMargin()),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceBetween,
+        verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         //  Input email
         TextInputField(
@@ -80,6 +83,7 @@ fun LoginScreenContent(
             value = email,
             hint = stringResource(R.string.email),
             onValueChange = { email = it },
+            testTagErrorText = TestTagLoginInputEmailError,
             errorMessage = if (uiState.errors != null) uiState.errors!!.usernameError else null
         )
 
@@ -91,6 +95,7 @@ fun LoginScreenContent(
             hint = stringResource(R.string.password),
             onValueChange = { password = it },
             errorMessage = if (uiState.errors != null) uiState.errors!!.passwordError else null,
+            testTagErrorText = TestTagLoginInputPasswordError,
             keyboardType = KeyboardType.Password
         )
 

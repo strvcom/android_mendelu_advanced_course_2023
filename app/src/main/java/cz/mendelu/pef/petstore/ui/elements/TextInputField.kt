@@ -15,11 +15,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Blue
 import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.graphics.Color.Companion.Red
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun TextInputField(
     value: String,
+    testTagErrorText: String,
     hint: String,
     modifier: Modifier = Modifier,
     leadingIcon: Int? = null,
@@ -97,15 +98,16 @@ fun TextInputField(
         ),
     )
 
-    Text(
-        text = if (errorMessage.isNullOrEmpty()) "" else errorMessage,
-        modifier = Modifier
-            .alpha(if (errorMessage.isNullOrEmpty()) 0f else 100f)
-            .fillMaxWidth()
-            .padding(0.dp, 0.dp, 0.dp, 4.dp),
-        color = Red,
-        textAlign = TextAlign.Start,
-        fontSize = 11.sp
-    )
-
+    if (errorMessage.isNullOrEmpty().not()) {
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(0.dp, 0.dp, 0.dp, 4.dp)
+                .testTag(testTagErrorText),
+            text = errorMessage!!,
+            color = Red,
+            textAlign = TextAlign.Start,
+            fontSize = 11.sp
+        )
+    }
 }

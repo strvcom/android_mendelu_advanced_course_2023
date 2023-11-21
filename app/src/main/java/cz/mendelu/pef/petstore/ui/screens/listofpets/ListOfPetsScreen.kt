@@ -14,6 +14,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -24,7 +25,7 @@ import cz.mendelu.pef.petstore.model.UiState
 import cz.mendelu.pef.petstore.ui.elements.BaseScreen
 import cz.mendelu.pef.petstore.ui.theme.basicTextColor
 
-const val TestTagListOfPets = "listOfPets"
+const val TestTagListOfPetsScreenContent = "TestTagListOfPetsScreenContent"
 
 @Composable
 fun ListOfPetsScreen(
@@ -68,7 +69,8 @@ fun ListOfPetsScreenContent(
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(paddingValues),
+            .padding(paddingValues)
+            .testTag(TestTagListOfPetsScreenContent),
     ) {
         if (uiState.data != null) {
             uiState.data!!.forEach { pet ->

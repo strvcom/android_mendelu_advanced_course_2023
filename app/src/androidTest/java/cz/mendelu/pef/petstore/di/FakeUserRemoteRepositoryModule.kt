@@ -10,9 +10,9 @@ import dagger.hilt.testing.TestInstallIn
 @Module
 @TestInstallIn(
     components = [SingletonComponent::class],
-    replaces = [RemoteRepositoryModule::class],
+    replaces = [UserRemoteRepositoryModule::class],
 )
-abstract class TestUserRemoteRepositoryBinder {
+abstract class FakeUserRemoteRepositoryModule {
     @Binds
     abstract fun provideUserRemoteRepository(service: FakeUserRemoteRepositoryImpl): IUserRemoteRepository
 }

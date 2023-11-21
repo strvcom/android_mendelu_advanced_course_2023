@@ -7,7 +7,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import cz.mendelu.pef.petstore.ui.elements.BaseScreen
 
 @Composable
-fun ListOfPetsScreen(
+fun PetDetailScreen(
     viewModel: PetDetailViewModel = hiltViewModel()
 ) {
     BaseScreen(
