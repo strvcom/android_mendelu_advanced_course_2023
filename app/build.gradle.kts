@@ -108,6 +108,9 @@ dependencies {
 
     // Coil
     implementation("io.coil-kt:coil-compose:2.1.0")
+
+    //  Timber
+    implementation("com.jakewharton.timber:timber:4.7.1")
 }
 
 // For Hilt

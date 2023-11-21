@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -34,32 +34,28 @@ fun LoginScreen(
     navigateToListOfPets: () -> Unit,
     viewModel: LoginScreenViewModel = hiltViewModel(),
 ) {
-    val uiState: MutableState<UiState<LoginResponse, LoginErrors>> =
-        rememberSaveable { mutableStateOf(UiState()) }
+    val uiState by viewModel.loginUIState.collectAsState()
 
-    viewModel.loginUIState.value.let {
-        uiState.value = it
-        if (it.data != null) {
-            LaunchedEffect(it) {
-                navigateToListOfPets()
-            }
+    LaunchedEffect(uiState) {
+        if (uiState.data != null) {
+            navigateToListOfPets()
         }
     }
 
     BaseScreen(
         topBarText = null,
-        showLoading = uiState.value.loading,
-        placeholderScreenContent = if (uiState.value.errors != null && uiState.value.errors!!.communicationError != null) {
+        showLoading = uiState.loading,
+        placeholderScreenContent = if (uiState.errors != null && uiState.errors!!.communicationError != null) {
             PlaceholderScreenContent(
                 null,
-                stringResource(id = uiState.value.errors!!.communicationError!!)
+                stringResource(id = uiState.errors!!.communicationError!!)
             )
         } else
             null
     ) {
         LoginScreenContent(
             actions = viewModel,
-            uiState = uiState.value
+            uiState = uiState
         )
     }
 }

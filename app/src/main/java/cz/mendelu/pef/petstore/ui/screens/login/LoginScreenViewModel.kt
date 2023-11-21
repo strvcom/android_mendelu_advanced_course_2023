@@ -1,35 +1,42 @@
 package cz.mendelu.pef.petstore.ui.screens.login
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import cz.mendelu.pef.petstore.R
 import cz.mendelu.pef.petstore.architecture.BaseViewModel
 import cz.mendelu.pef.petstore.architecture.CommunicationResult
+import cz.mendelu.pef.petstore.communication.user.IUserRemoteRepository
 import cz.mendelu.pef.petstore.communication.user.LoginResponse
-import cz.mendelu.pef.petstore.communication.user.UserRemoteRepositoryImpl
 import cz.mendelu.pef.petstore.datastore.IDataStoreRepository
 import cz.mendelu.pef.petstore.extension.isValidEmail
 import cz.mendelu.pef.petstore.extension.isValidPassword
 import cz.mendelu.pef.petstore.model.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginScreenViewModel
-@Inject constructor(
+class LoginScreenViewModel @Inject constructor(
     private val dataStoreRepository: IDataStoreRepository,
-    private val userRemoteRepository: UserRemoteRepositoryImpl
+    private val userRemoteRepository: IUserRemoteRepository
 ) : BaseViewModel(), LoginScreenActions {
 
-    val loginUIState: MutableState<UiState<LoginResponse, LoginErrors>> =
-        mutableStateOf(UiState(loading = false))
+    val loginUIState: MutableStateFlow<UiState<LoginResponse, LoginErrors>> =
+        MutableStateFlow(UiState(loading = false))
 
     override fun login(email: String, password: String) {
         val isEmailValid = email.isValidEmail()
         val isPasswordValid = password.isValidPassword()
+
+        /*if (isEmailValid && isPasswordValid) {
+            launch {
+                dataStoreRepository.setLoginSuccessful()
+                loginUIState.value =
+                    UiState(loading = false, data = LoginResponse(0, "", ""), errors = null)
+            }
+            return
+        }*/
 
         if (isEmailValid.not() || isPasswordValid.not()) {
             loginUIState.value = UiState(
