@@ -50,8 +50,8 @@ fun LoginScreen(
 
     viewModel.loginUIState.value.let {
         uiState.value = it
-        if(it.data != null){
-            LaunchedEffect(it){
+        if (it.data != null) {
+            LaunchedEffect(it) {
                 navigator.navigate(ListOfPetsScreenDestination())
             }
         }
@@ -60,26 +60,27 @@ fun LoginScreen(
     BaseScreen(
         topBarText = null,
         showLoading = uiState.value.loading,
-        placeholderScreenContent = if (uiState.value.errors != null && uiState.value.errors!!.communicationError != null){
-            PlaceholderScreenContent(null, stringResource(id = uiState.value.errors!!.communicationError!!))
+        placeholderScreenContent = if (uiState.value.errors != null && uiState.value.errors!!.communicationError != null) {
+            PlaceholderScreenContent(
+                null,
+                stringResource(id = uiState.value.errors!!.communicationError!!)
+            )
         } else
             null
     ) {
         LoginScreenContent(
-            paddingValues = it,
             actions = viewModel,
-            uiState = uiState.value)
+            uiState = uiState.value
+        )
     }
 }
 
 @Composable
 fun LoginScreenContent(
-    paddingValues: PaddingValues,
     uiState: UiState<LoginResponse, LoginErrors>,
     actions: LoginScreenActions
-    ){
-
-    var username by rememberSaveable { mutableStateOf("") }
+) {
+    var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
 
     Column(
@@ -87,20 +88,27 @@ fun LoginScreenContent(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween,
     ) {
-
-        TextInputField(value = username, hint = stringResource(R.string.email), onValueChange = {
-            username = it
+        //  Input email
+        TextInputField(value = email, hint = stringResource(R.string.email), onValueChange = {
+            email = it
         }, errorMessage = if (uiState.errors != null) uiState.errors!!.usernameError else null)
 
-        TextInputField(value = password, hint = stringResource(R.string.password), onValueChange = {
-            password = it
-        }, errorMessage = if (uiState.errors != null) uiState.errors!!.passwordError else null,
-            keyboardType = KeyboardType.Password)
+        //  Input password
+        TextInputField(
+            value = password, hint = stringResource(R.string.password), onValueChange = {
+                password = it
+            }, errorMessage = if (uiState.errors != null) uiState.errors!!.passwordError else null,
+            keyboardType = KeyboardType.Password
+        )
 
         RoundButton(
-            text = stringResource(R.string.sign_in), onClick = {
-                actions.login(username, password)
-            })
-
+            text = stringResource(R.string.sign_in),
+            onClick = {
+                actions.login(
+                    email = email,
+                    password = password
+                )
+            }
+        )
     }
 }
