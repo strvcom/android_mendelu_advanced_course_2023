@@ -25,7 +25,7 @@ import cz.mendelu.pef.petstore.model.UiState
 import cz.mendelu.pef.petstore.ui.elements.BaseScreen
 import cz.mendelu.pef.petstore.ui.theme.basicTextColor
 
-const val TestTagListOfPetsScreenContent = "TestTagListOfPetsScreenContent"
+const val TestTagListOfPetsScreenLazyList = "TestTagListOfPetsScreenLazyList"
 
 @Composable
 fun ListOfPetsScreen(
@@ -70,7 +70,7 @@ fun ListOfPetsScreenContent(
         modifier = Modifier
             .fillMaxWidth()
             .padding(paddingValues)
-            .testTag(TestTagListOfPetsScreenContent),
+            .testTag(TestTagListOfPetsScreenLazyList),
     ) {
         if (uiState.data != null) {
             uiState.data!!.forEach { pet ->

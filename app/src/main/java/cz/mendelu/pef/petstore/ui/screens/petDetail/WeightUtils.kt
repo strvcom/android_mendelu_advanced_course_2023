@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 
 enum class WeightUnitsEnum(
-    private val unit: String,
+    val unit: String,
     val displayedOption: String,
 ) {
     POUNDS(

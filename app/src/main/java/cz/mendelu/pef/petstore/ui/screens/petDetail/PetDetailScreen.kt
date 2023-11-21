@@ -19,6 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -26,6 +27,11 @@ import coil.compose.AsyncImage
 import cz.mendelu.pef.petstore.model.Pet
 import cz.mendelu.pef.petstore.ui.elements.BaseScreen
 import cz.mendelu.pef.petstore.ui.theme.basicTextColor
+
+const val TestTagPetDetailName = "TestTagPetDetailName"
+const val TestTagPetDetailWeightText = "TestTagPetDetailWeightText"
+const val TestTagPetDetailRadioButtonKilograms = "TestTagPetDetailRadioButtonKilograms"
+const val TestTagPetDetailRadioButtonPounds = "TestTagPetDetailRadioButtonPounds"
 
 @Composable
 fun PetDetailScreen(
@@ -82,10 +88,12 @@ private fun PetDetailScreenContent(
             )
         }
         Text(
+            modifier = Modifier.testTag(TestTagPetDetailName),
             text = pet.name.orEmpty(),
             color = basicTextColor()
         )
         Text(
+            modifier = Modifier.testTag(TestTagPetDetailWeightText),
             text = "Weight: ${weightUnit.formatWeight(weightKgs = pet.weightKg ?: 0.0)}",
             color = basicTextColor()
         )
@@ -94,7 +102,11 @@ private fun PetDetailScreenContent(
             WeightUnitRadioButton(
                 unit = unit,
                 selectedUnit = weightUnit,
-                onClick = { weightUnit = unit }
+                onClick = { weightUnit = unit },
+                testTag = when (unit) {
+                    WeightUnitsEnum.KILOGRAMS -> TestTagPetDetailRadioButtonKilograms
+                    WeightUnitsEnum.POUNDS -> TestTagPetDetailRadioButtonPounds
+                }
             )
         }
     }
@@ -104,6 +116,7 @@ private fun PetDetailScreenContent(
 private fun WeightUnitRadioButton(
     unit: WeightUnitsEnum,
     selectedUnit: WeightUnitsEnum,
+    testTag: String,
     onClick: () -> Unit
 ) {
     val isItemSelected: (WeightUnitsEnum) -> Boolean = { selectedUnit == it }
@@ -117,6 +130,7 @@ private fun WeightUnitRadioButton(
                 role = Role.RadioButton
             )
             .padding(8.dp)
+            .testTag(testTag),
     ) {
         RadioButton(
             selected = isItemSelected(unit),

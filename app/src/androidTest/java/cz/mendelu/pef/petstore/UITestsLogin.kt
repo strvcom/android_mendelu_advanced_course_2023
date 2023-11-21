@@ -12,7 +12,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import cz.mendelu.pef.petstore.ui.activities.MainActivity
 import cz.mendelu.pef.petstore.ui.navigation.MainNavHost
 import cz.mendelu.pef.petstore.ui.screens.listofpets.RouteListOfPets
-import cz.mendelu.pef.petstore.ui.screens.listofpets.TestTagListOfPetsScreenContent
+import cz.mendelu.pef.petstore.ui.screens.listofpets.TestTagListOfPetsScreenLazyList
 import cz.mendelu.pef.petstore.ui.screens.login.RouteLogin
 import cz.mendelu.pef.petstore.ui.screens.login.TestTagLoginButton
 import cz.mendelu.pef.petstore.ui.screens.login.TestTagLoginInputEmail
@@ -28,7 +28,6 @@ import org.junit.FixMethodOrder
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runners.MethodSorters
-import timber.log.Timber
 
 
 /**
@@ -40,7 +39,7 @@ import timber.log.Timber
 @ExperimentalCoroutinesApi
 @HiltAndroidTest
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-class UITests {
+class UITestsLogin {
 
     private val targetContext: Context = InstrumentationRegistry.getInstrumentation().targetContext
 
@@ -130,11 +129,7 @@ class UITests {
     fun test_launch_list_of_pets() {
         launchListOfPetsScreenWithNavigation()
         with(composeRule) {
-            println("XXX start")
-            Timber.d("XXX start")
-            //val screen = hasTestTag(TestTagListOfPetsScreenContent)
-            //waitUntilAtLeastOneExists(screen, 1_000)
-            onNodeWithTag(TestTagListOfPetsScreenContent).assertIsDisplayed()
+            onNodeWithTag(TestTagListOfPetsScreenLazyList).assertIsDisplayed()
             Thread.sleep(1000)
         }
     }
