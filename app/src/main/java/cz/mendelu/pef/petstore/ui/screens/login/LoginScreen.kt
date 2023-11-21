@@ -16,9 +16,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.annotation.RootNavGraph
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import cz.mendelu.pef.compose.todo.ui.elements.PlaceholderScreenContent
 import cz.mendelu.pef.petstore.R
 import cz.mendelu.pef.petstore.communication.user.LoginResponse
@@ -26,21 +23,17 @@ import cz.mendelu.pef.petstore.model.UiState
 import cz.mendelu.pef.petstore.ui.elements.BaseScreen
 import cz.mendelu.pef.petstore.ui.elements.RoundButton
 import cz.mendelu.pef.petstore.ui.elements.TextInputField
-import cz.mendelu.pef.petstore.ui.screens.destinations.ListOfPetsScreenDestination
 import cz.mendelu.pef.petstore.ui.theme.basicMargin
 
 const val TestTagLoginInputEmail = "loginInputEmail"
 const val TestTagLoginInputPassword = "loginInputPassword"
 const val TestTagLoginButton = "loginButton"
 
-@RootNavGraph(start = true)
-@Destination
 @Composable
 fun LoginScreen(
-    navigator: DestinationsNavigator,
+    navigateToListOfPets: () -> Unit,
+    viewModel: LoginScreenViewModel = hiltViewModel(),
 ) {
-    val viewModel = hiltViewModel<LoginScreenViewModel>()
-
     val uiState: MutableState<UiState<LoginResponse, LoginErrors>> =
         rememberSaveable { mutableStateOf(UiState()) }
 
@@ -48,7 +41,7 @@ fun LoginScreen(
         uiState.value = it
         if (it.data != null) {
             LaunchedEffect(it) {
-                navigator.navigate(ListOfPetsScreenDestination())
+                navigateToListOfPets()
             }
         }
     }

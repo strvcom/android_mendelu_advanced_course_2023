@@ -1,4 +1,5 @@
 @file:Suppress("SpellCheckingInspection")
+
 package cz.mendelu.pef.petstore.datastore
 
 import android.content.Context
@@ -11,7 +12,7 @@ class DataStoreRepositoryImpl(private val context: Context) : IDataStoreReposito
     override suspend fun setLoginSuccessful() {
         val preferencesKey = booleanPreferencesKey(DataStoreConstants.LOGIN_SUCCESSFUL)
         context.dataStore.edit { preferences ->
-            preferences[preferencesKey] = false
+            preferences[preferencesKey] = true
         }
     }
 
@@ -20,12 +21,12 @@ class DataStoreRepositoryImpl(private val context: Context) : IDataStoreReposito
             val preferencesKey = booleanPreferencesKey(DataStoreConstants.LOGIN_SUCCESSFUL)
             val preferences = context.dataStore.data.first()
             if (!preferences.contains(preferencesKey))
-                true
+                false
             else
                 preferences[preferencesKey]!!
-        }catch (e: Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
-            true
+            false
         }
     }
 }

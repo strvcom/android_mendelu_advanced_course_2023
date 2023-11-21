@@ -77,13 +77,10 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended:1.4.3")
     implementation("androidx.compose.material3:material3:1.1.0-alpha04")
 
-
-
     // Hilt
     implementation("com.google.dagger:hilt-android:2.44")
     kapt("com.google.dagger:hilt-android-compiler:2.44")
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
-
 
     implementation("com.google.dagger:hilt-android:2.42")
     kapt("com.google.dagger:hilt-android-compiler:2.42")
@@ -94,19 +91,16 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
 
-
     // Moshi for json converter
     implementation("com.squareup.moshi:moshi:1.14.0")
     implementation("com.squareup.moshi:moshi-kotlin:1.14.0")
 
-
-    // Navigation
-    implementation("io.github.raamcosta.compose-destinations:animations-core:1.8.42-beta")
-    ksp("io.github.raamcosta.compose-destinations:ksp:1.8.42-beta")
-
     // DataStore
     implementation("androidx.datastore:datastore-core:1.0.0")
     implementation("androidx.datastore:datastore-preferences:1.0.0")
+
+    // Navigation - native compose
+    implementation("androidx.navigation:navigation-compose:2.5.3")
 
     // Hilt testing
     androidTestImplementation("com.google.dagger:hilt-android-testing:2.44")

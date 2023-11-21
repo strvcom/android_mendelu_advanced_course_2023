@@ -13,8 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import cz.mendelu.pef.compose.todo.ui.elements.PlaceholderScreenContent
 import cz.mendelu.pef.petstore.model.Pet
 import cz.mendelu.pef.petstore.model.UiState
@@ -23,13 +21,10 @@ import cz.mendelu.pef.petstore.ui.theme.basicTextColor
 
 const val TestTagListOfPets = "listOfPets"
 
-@Destination
 @Composable
 fun ListOfPetsScreen(
-    navigator: DestinationsNavigator,
+    viewModel: ListOfPetsViewModel = hiltViewModel()
 ) {
-    val viewModel = hiltViewModel<ListOfPetsViewModel>()
-
     val uiState: MutableState<UiState<List<Pet>, ListOfPetsErrors>> =
         rememberSaveable { mutableStateOf(UiState()) }
 
