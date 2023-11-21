@@ -17,14 +17,15 @@ import cz.mendelu.pef.compose.todo.ui.elements.PlaceHolderScreen
 import cz.mendelu.pef.compose.todo.ui.elements.PlaceholderScreenContent
 import cz.mendelu.pef.petstore.R
 import cz.mendelu.pef.petstore.ui.theme.basicMargin
-import cz.mendelu.pef.petstore.ui.theme.getBackgroundColor
 import cz.mendelu.pef.petstore.ui.theme.basicTextColor
+import cz.mendelu.pef.petstore.ui.theme.getBackgroundColor
 import cz.mendelu.pef.petstore.ui.theme.getTintColor
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun BaseScreen(
     topBarText: String?,
+    modifier: Modifier = Modifier,
     onBackClick: (() -> Unit)? = null,
     showSidePadding: Boolean = true,
     drawFullScreenContent: Boolean = false,
@@ -32,70 +33,73 @@ fun BaseScreen(
     showLoading: Boolean = false,
     floatingActionButton: @Composable () -> Unit = {},
     actions: @Composable RowScope.() -> Unit = {},
-    content: @Composable (paddingValues: PaddingValues) -> Unit) {
+    content: @Composable (paddingValues: PaddingValues) -> Unit
+) {
 
-        Scaffold(
-            contentColor = getBackgroundColor(),
-            containerColor = getBackgroundColor(),
-            floatingActionButton = floatingActionButton,
-            topBar = {
-                TopAppBar(
-                    title = {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .wrapContentWidth(align = Alignment.CenterHorizontally)
-                        ) {
-                            if(topBarText != null) {
-                                Text(
-                                    text = topBarText,
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = basicTextColor(),
-                                    modifier = Modifier
-                                        .padding(start = 0.dp)
-                                        .weight(1.5f)
-                                )
-                            }
-                        }
-                    },
-                    actions = actions,
-                    navigationIcon = {
-                        if (onBackClick != null) {
-                            IconButton(onClick = onBackClick) {
-                                Icon(
-                                    imageVector = Icons.Filled.ArrowBack,
-                                    contentDescription = stringResource(R.string.back),
-                                    tint = getTintColor()
-                                )
-                            }
-                        }
-                    }
-                )
-            }
-        ) {
-            if (placeholderScreenContent != null){
-                PlaceHolderScreen(
-                    modifier = Modifier.padding(it),
-                    content = placeholderScreenContent)
-            } else if (showLoading){
-                LoadingScreen(modifier = Modifier.padding(it))
-            } else {
-                if (!drawFullScreenContent) {
-                    LazyColumn(modifier = Modifier.padding(it)) {
-                        item {
-                            Column(
-                                verticalArrangement = Arrangement.Top,
+    Scaffold(
+        modifier = modifier,
+        contentColor = getBackgroundColor(),
+        containerColor = getBackgroundColor(),
+        floatingActionButton = floatingActionButton,
+        topBar = {
+            TopAppBar(
+                title = {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentWidth(align = Alignment.CenterHorizontally)
+                    ) {
+                        if (topBarText != null) {
+                            Text(
+                                text = topBarText,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = basicTextColor(),
                                 modifier = Modifier
-                                    .padding(if (!showSidePadding) basicMargin() else 0.dp)
-                            ) {
-                                content(it)
-                            }
+                                    .padding(start = 0.dp)
+                                    .weight(1.5f)
+                            )
                         }
                     }
-                } else {
-                    content(it)
+                },
+                actions = actions,
+                navigationIcon = {
+                    if (onBackClick != null) {
+                        IconButton(onClick = onBackClick) {
+                            Icon(
+                                imageVector = Icons.Filled.ArrowBack,
+                                contentDescription = stringResource(R.string.back),
+                                tint = getTintColor()
+                            )
+                        }
+                    }
                 }
+            )
+        }
+    ) {
+        if (placeholderScreenContent != null) {
+            PlaceHolderScreen(
+                modifier = Modifier.padding(it),
+                content = placeholderScreenContent
+            )
+        } else if (showLoading) {
+            LoadingScreen(modifier = Modifier.padding(it))
+        } else {
+            if (!drawFullScreenContent) {
+                LazyColumn(modifier = Modifier.padding(it)) {
+                    item {
+                        Column(
+                            verticalArrangement = Arrangement.Top,
+                            modifier = Modifier
+                                .padding(if (!showSidePadding) basicMargin() else 0.dp)
+                        ) {
+                            content(it)
+                        }
+                    }
+                }
+            } else {
+                content(it)
             }
         }
+    }
 
 }

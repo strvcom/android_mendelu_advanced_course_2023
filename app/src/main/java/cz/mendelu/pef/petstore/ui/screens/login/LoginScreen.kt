@@ -31,6 +31,7 @@ import cz.mendelu.pef.petstore.ui.theme.basicMargin
 
 const val TestTagLoginInputEmail = "loginInputEmail"
 const val TestTagLoginInputPassword = "loginInputPassword"
+const val TestTagLoginButton = "loginButton"
 
 @RootNavGraph(start = true)
 @Destination
@@ -105,6 +106,8 @@ fun LoginScreenContent(
         )
 
         RoundButton(
+            modifier = Modifier
+                .testTag(TestTagLoginButton),
             text = stringResource(R.string.sign_in),
             onClick = {
                 actions.login(

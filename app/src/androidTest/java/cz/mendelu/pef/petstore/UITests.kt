@@ -8,6 +8,8 @@ import androidx.navigation.NavHostController
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
 import cz.mendelu.pef.petstore.ui.activities.MainActivity
+import cz.mendelu.pef.petstore.ui.screens.listofpets.TestTagListOfPets
+import cz.mendelu.pef.petstore.ui.screens.login.TestTagLoginButton
 import cz.mendelu.pef.petstore.ui.screens.login.TestTagLoginInputEmail
 import cz.mendelu.pef.petstore.ui.screens.login.TestTagLoginInputPassword
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -65,6 +67,28 @@ class UITests {
                 //hasText(targetContext.resources.getString(R.string.report_enter_email_invalid)),
                 hasText("random"),
             ).assertDoesNotExist()
+        }
+    }
+
+    @Test
+    fun test_report_email_valid_d() {
+        //launchReportScreen()
+        with(composeRule) {
+            onNodeWithTag(TestTagLoginInputEmail).assertIsDisplayed()
+            onNodeWithTag(TestTagLoginInputPassword).assertIsDisplayed()
+            onNodeWithTag(TestTagLoginInputEmail).performTextInput("test@email.com")
+            onNodeWithTag(TestTagLoginInputPassword).performTextInput("eeeeeeeeee1")
+            onNodeWithTag(TestTagLoginButton).performClick()
+            waitForIdle()
+            Thread.sleep(500) // Just to better see
+            onNodeWithTag(TestTagListOfPets).assertIsDisplayed()
+
+            // Explain: Why not this?
+            //composeRule.onNodeWithTag(TEST_TAG_REPORT_EMAIL_ERROR, useUnmergedTree = true).assertIsNotDisplayed()
+            /*onNode(
+                //hasText(targetContext.resources.getString(R.string.report_enter_email_invalid)),
+                hasText("List of pets"),
+            ).assertDoesNotExist()*/
         }
     }
 
