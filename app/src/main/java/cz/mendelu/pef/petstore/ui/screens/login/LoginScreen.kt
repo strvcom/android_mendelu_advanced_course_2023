@@ -2,11 +2,7 @@ package cz.mendelu.pef.petstore.ui.screens.login
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -16,7 +12,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -26,16 +22,15 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import cz.mendelu.pef.compose.todo.ui.elements.PlaceholderScreenContent
 import cz.mendelu.pef.petstore.R
 import cz.mendelu.pef.petstore.communication.user.LoginResponse
-import cz.mendelu.pef.petstore.model.Pet
 import cz.mendelu.pef.petstore.model.UiState
 import cz.mendelu.pef.petstore.ui.elements.BaseScreen
 import cz.mendelu.pef.petstore.ui.elements.RoundButton
 import cz.mendelu.pef.petstore.ui.elements.TextInputField
 import cz.mendelu.pef.petstore.ui.screens.destinations.ListOfPetsScreenDestination
-import cz.mendelu.pef.petstore.ui.screens.listofpets.ListOfPetsScreen
-import cz.mendelu.pef.petstore.ui.screens.listofpets.ListOfPetsScreenContent
 import cz.mendelu.pef.petstore.ui.theme.basicMargin
 
+const val TestTagLoginInputEmail = "loginInputEmail"
+const val TestTagLoginInputPassword = "loginInputPassword"
 
 @RootNavGraph(start = true)
 @Destination
@@ -89,15 +84,23 @@ fun LoginScreenContent(
         verticalArrangement = Arrangement.SpaceBetween,
     ) {
         //  Input email
-        TextInputField(value = email, hint = stringResource(R.string.email), onValueChange = {
-            email = it
-        }, errorMessage = if (uiState.errors != null) uiState.errors!!.usernameError else null)
+        TextInputField(
+            modifier = Modifier
+                .testTag(TestTagLoginInputEmail),
+            value = email,
+            hint = stringResource(R.string.email),
+            onValueChange = { email = it },
+            errorMessage = if (uiState.errors != null) uiState.errors!!.usernameError else null
+        )
 
         //  Input password
         TextInputField(
-            value = password, hint = stringResource(R.string.password), onValueChange = {
-                password = it
-            }, errorMessage = if (uiState.errors != null) uiState.errors!!.passwordError else null,
+            modifier = Modifier
+                .testTag(TestTagLoginInputPassword),
+            value = password,
+            hint = stringResource(R.string.password),
+            onValueChange = { password = it },
+            errorMessage = if (uiState.errors != null) uiState.errors!!.passwordError else null,
             keyboardType = KeyboardType.Password
         )
 

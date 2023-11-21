@@ -20,7 +20,8 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        //testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "cz.mendelu.pef.petstore.HiltTestRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -83,6 +84,12 @@ dependencies {
     kapt("com.google.dagger:hilt-android-compiler:2.44")
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
+
+    implementation("com.google.dagger:hilt-android:2.42")
+    kapt("com.google.dagger:hilt-android-compiler:2.42")
+    kapt("androidx.hilt:hilt-compiler:1.0.0")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
@@ -101,6 +108,9 @@ dependencies {
     implementation("androidx.datastore:datastore-core:1.0.0")
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
+    // Hilt testing
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.44")
+    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.44")
 }
 
 // For Hilt

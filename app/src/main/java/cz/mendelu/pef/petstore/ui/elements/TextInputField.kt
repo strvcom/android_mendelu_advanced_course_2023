@@ -21,7 +21,6 @@ import androidx.compose.ui.graphics.Color.Companion.Blue
 import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.graphics.Color.Companion.Red
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -30,29 +29,36 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TextInputField(value: String,
-                   hint: String,
-                   leadingIcon: Int? = null,
-                   keyboardType: KeyboardType = KeyboardType.Ascii,
-                   onValueChange: ((String) -> Unit),
-                   errorMessage: String? = null){
+fun TextInputField(
+    value: String,
+    hint: String,
+    modifier: Modifier = Modifier,
+    leadingIcon: Int? = null,
+    keyboardType: KeyboardType = KeyboardType.Ascii,
+    onValueChange: ((String) -> Unit),
+    errorMessage: String? = null
+) {
 
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
 
     OutlinedTextField(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(0.dp, 0.dp, 0.dp, 0.dp),
         value = value,
         label = { Text(text = hint) },
         onValueChange = onValueChange,
         visualTransformation =
-            if (keyboardType == KeyboardType.Password)
-                if (passwordVisible)
-                    VisualTransformation.None
-                else
-                    PasswordVisualTransformation()
+        if (keyboardType == KeyboardType.Password)
+            if (passwordVisible)
+                VisualTransformation.None
             else
-                VisualTransformation.None,
-        keyboardOptions =KeyboardOptions(keyboardType = keyboardType),
+                PasswordVisualTransformation()
+        else
+            VisualTransformation.None,
+        keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
         isError = false,
         maxLines = 1,
         trailingIcon = {
@@ -65,12 +71,13 @@ fun TextInputField(value: String,
                     Icon(
                         imageVector = image,
                         contentDescription = description,
-                        tint = Color.Black)
+                        tint = Color.Black
+                    )
                 }
             }
         },
 
-        leadingIcon =  if (leadingIcon != null) {
+        leadingIcon = if (leadingIcon != null) {
             {
                 Icon(
                     painter = painterResource(id = leadingIcon),
@@ -82,16 +89,13 @@ fun TextInputField(value: String,
             null
         },
         singleLine = true,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(0.dp, 0.dp, 0.dp, 0.dp),
         colors = TextFieldDefaults.outlinedTextFieldColors(
             cursorColor = Blue,
             focusedBorderColor = if (!errorMessage.isNullOrEmpty()) Red else Blue,
             unfocusedBorderColor = if (!errorMessage.isNullOrEmpty()) Red else Gray,
             focusedLabelColor = if (!errorMessage.isNullOrEmpty()) Red else Gray,
         ),
-        )
+    )
 
     Text(
         text = if (errorMessage.isNullOrEmpty()) "" else errorMessage,
