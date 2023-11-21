@@ -47,4 +47,13 @@ class PasswordValidatorUnitTests {
         )
     }
 
+    @Test
+    fun `when password input is not incorrect we expect not valid`() {
+        val passwordInput = "a"
+        assertNotEquals(
+            /* unexpected = */ true,
+            /* actual = */ passwordInput.isValidPassword(),
+        )
+    }
+
 }
