@@ -1,6 +1,5 @@
 package cz.mendelu.pef.petstore
 
-import android.content.Context
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material3.MaterialTheme
@@ -8,7 +7,6 @@ import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import androidx.test.platform.app.InstrumentationRegistry
 import cz.mendelu.pef.petstore.mock.ServerMock
 import cz.mendelu.pef.petstore.ui.activities.MainActivity
 import cz.mendelu.pef.petstore.ui.navigation.MainNavHost
@@ -41,8 +39,6 @@ import org.junit.runners.MethodSorters
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class UITestsPetDetail {
 
-    private val targetContext: Context = InstrumentationRegistry.getInstrumentation().targetContext
-
     private lateinit var navController: NavHostController
 
     @get:Rule(order = 0)
@@ -56,6 +52,19 @@ class UITestsPetDetail {
         hiltRule.inject()
     }
 
+    //  2 - HIGH
+    @Test
+    fun test_list_of_pets_exists() {
+        launchListOfPetsScreenWithNavigation()
+        with(composeRule) {
+            onNodeWithTag(TestTagListOfPetsScreenLazyList).assertExists()
+            onNodeWithTag(TestTagListOfPetsScreenLazyList).assertIsDisplayed()
+
+            Thread.sleep(1000)   // Just for better visibility
+        }
+    }
+
+    //  3 - HIGH
     @Test
     fun test_navigate_to_correct_pet_detail_screen() {
         launchListOfPetsScreenWithNavigation()
@@ -69,7 +78,7 @@ class UITestsPetDetail {
             onNode(hasText(targetPet.name!!)).performClick()
             waitForIdle()
 
-            Thread.sleep(500)   // Just for better visibility
+            Thread.sleep(1000)   // Just for better visibility
             val route = navController.currentBackStackEntry?.destination?.route
             Assert.assertTrue(route?.contains(RoutePetDetail) ?: false)
 
@@ -86,7 +95,7 @@ class UITestsPetDetail {
             onNodeWithTag(TestTagListOfPetsScreenLazyList).performScrollToNode(hasText(targetPetName))
 
             waitForIdle()
-            Thread.sleep(500) // Just to better see
+            Thread.sleep(1000) // Just to better see
 
             onNode(hasText(targetPetName)).assertIsDisplayed()
             onNode(hasText(targetPetName)).performClick()
@@ -110,7 +119,7 @@ class UITestsPetDetail {
             onNodeWithTag(TestTagListOfPetsScreenLazyList).performScrollToNode(hasText(targetPetName))
 
             waitForIdle()
-            Thread.sleep(500) // Just to better see
+            Thread.sleep(1000) // Just to better see
 
             onNode(hasText(targetPetName)).assertIsDisplayed()
             onNode(hasText(targetPetName)).performClick()
@@ -145,7 +154,7 @@ class UITestsPetDetail {
         }
     }
 
-
+    //  1 - HIGH
     @OptIn(ExperimentalAnimationApi::class)
     private fun launchListOfPetsScreenWithNavigation() {
         composeRule.activity.setContent {

@@ -1,6 +1,5 @@
 package cz.mendelu.pef.petstore
 
-import android.content.Context
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material3.MaterialTheme
@@ -8,11 +7,9 @@ import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import androidx.test.platform.app.InstrumentationRegistry
 import cz.mendelu.pef.petstore.ui.activities.MainActivity
 import cz.mendelu.pef.petstore.ui.navigation.MainNavHost
 import cz.mendelu.pef.petstore.ui.screens.listofpets.RouteListOfPets
-import cz.mendelu.pef.petstore.ui.screens.listofpets.TestTagListOfPetsScreenLazyList
 import cz.mendelu.pef.petstore.ui.screens.login.RouteLogin
 import cz.mendelu.pef.petstore.ui.screens.login.TestTagLoginButton
 import cz.mendelu.pef.petstore.ui.screens.login.TestTagLoginInputEmail
@@ -41,8 +38,6 @@ import org.junit.runners.MethodSorters
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class UITestsLogin {
 
-    private val targetContext: Context = InstrumentationRegistry.getInstrumentation().targetContext
-
     private lateinit var navController: NavHostController
 
     @get:Rule(order = 0)
@@ -56,6 +51,20 @@ class UITestsLogin {
         hiltRule.inject()
     }
 
+    //  2 - HIGH
+    @Test
+    fun test_is_displayed_perform_text_input() {
+        launchLoginScreenWithNavigation()
+        with(composeRule) {
+            onNodeWithTag(TestTagLoginInputEmail).assertIsDisplayed()
+            onNodeWithTag(TestTagLoginInputEmail).performTextInput("test@email.com")
+
+            waitForIdle()
+            Thread.sleep(1000)   // Just for better visibility
+        }
+    }
+
+    //  3 - HIGH
     @Test
     fun test_input_valid_credentials_and_navigate_next() {
         launchLoginScreenWithNavigation()
@@ -70,11 +79,12 @@ class UITestsLogin {
             waitForIdle()
 
             val route = navController.currentBackStackEntry?.destination?.route
-            Thread.sleep(500)
+            Thread.sleep(1000)   // Just for better visibility
             assertTrue(route == RouteListOfPets)
         }
     }
 
+    //  4 - MEDIUM
     @Test
     fun test_input_invalid_credentials_and_stay_on_login() {
         launchLoginScreenWithNavigation()
@@ -89,11 +99,12 @@ class UITestsLogin {
             waitForIdle()
 
             val route = navController.currentBackStackEntry?.destination?.route
-            Thread.sleep(500)
+            Thread.sleep(1000)   // Just for better visibility
             assertTrue(route == RouteLogin)
         }
     }
 
+    //  5 - HIGH
     @Test
     fun test_input_invalid_email_and_display_error() {
         launchLoginScreenWithNavigation()
@@ -109,7 +120,7 @@ class UITestsLogin {
         }
     }
 
-    //  TODO: show valid email and email error is not displayed
+    //  6 - LOW
     @Test
     fun test_input_invalid_password_and_display_error() {
         launchLoginScreenWithNavigation()
@@ -125,15 +136,7 @@ class UITestsLogin {
         }
     }
 
-    @Test
-    fun test_launch_list_of_pets() {
-        launchListOfPetsScreenWithNavigation()
-        with(composeRule) {
-            onNodeWithTag(TestTagListOfPetsScreenLazyList).assertIsDisplayed()
-            Thread.sleep(1000)
-        }
-    }
-
+    //  1 - HIGH
     @OptIn(ExperimentalAnimationApi::class)
     private fun launchLoginScreenWithNavigation() {
         composeRule.activity.setContent {
@@ -142,19 +145,6 @@ class UITestsLogin {
                 MainNavHost(
                     navController = navController,
                     showLogin = { true },
-                )
-            }
-        }
-    }
-
-    @OptIn(ExperimentalAnimationApi::class)
-    private fun launchListOfPetsScreenWithNavigation() {
-        composeRule.activity.setContent {
-            MaterialTheme {
-                navController = rememberNavController()
-                MainNavHost(
-                    navController = navController,
-                    showLogin = { false },
                 )
             }
         }
